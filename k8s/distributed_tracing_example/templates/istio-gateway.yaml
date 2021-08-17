@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: weather-service
+  namespace: istio-system
+spec:
+  selector:
+    istio: internalingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "{{ .Values.certificate.domainName }}"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "{{ .Values.certificate.domainName }}"
+    tls:
+      mode: SIMPLE
+      serverCertificate: sds
+      privateKey: sds
+      credentialName: weather-svc-dev-cert

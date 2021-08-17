@@ -1,0 +1,32 @@
+# Default values for js-sentry-example.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+certificate:
+  name: weather-svc-dev-cert-02
+  domainName: weather-svc-dev.pdg.mapan.io
+  issuerKind: Issuer
+  issuerName: letsencrypt-prod
+  secretName: weather-svc-dev-cert
+  namespace: istio-system
+
+deployment:
+  name: distributed-tracing-example
+  namespace: distributed-tracing-example
+  replicas: 1
+  label: distributed-tracing-example
+  containerNameWeatherService: weather-service
+  containerImageWeatherService: ragnalinux/distributed_tracing_example:weather_service_latest
+  containerNameOWMService: owm-service
+  containerImageOWMService: ragnalinux/distributed_tracing_example:owm_service_latest
+  requestCPU: 200m
+  requestMemory: 32M
+  limitCPU: 500m
+  limitMemory: 64M
+  httpPortWeatherService: 8080
+  httpPortOWMService: 8082
+  healthPath: "/ping"
+  #tracerEndpoint: "http://jaeger-collector.istio-system.svc.cluster.local:14268/api/traces"
+  tracerEndpoint: "opentelemetry-collector-sentry-collector.opentelemetry-collector.svc.cluster.local:4317"
+  owmHost: "owm-service.distributed-tracing-example.svc.cluster.local:8082"
+  owmAppID: "5c118526d22ec862ba9d146bad2f3c45"

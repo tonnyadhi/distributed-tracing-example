@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-service
+  namespace: {{ .Values.deployment.namespace }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.label }}
+    spec:
+      containers:
+      - name: {{ .Values.deployment.containerNameWeatherService }}
+        image: {{ .Values.deployment.containerImageWeatherService }}
+        resources:
+          requests:
+            cpu: {{ .Values.deployment.requestCPU }}
+            memory: {{ .Values.deployment.requestMemory }}
+          limits:
+            cpu: {{ .Values.deployment.limitCPU }}
+            memory: {{ .Values.deployment.limitMemory }}
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: {{ .Values.deployment.httpPortWeatherService }}
+            protocol: TCP  
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.deployment.healthPath }}
+            port: {{ .Values.deployment.httpPortWeatherService }}
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.deployment.healthPath }}
+            port: {{ .Values.deployment.httpPortWeatherService }}
+            scheme: HTTP
+        env:
+          - name: TRACER_ENDPOINT
+            value: {{ .Values.deployment.tracerEndpoint }}
+          - name: OWM_APP_ID
+            value: {{ .Values.deployment.owmAppID }}
+          - name: OWM_ADDR
+            value: {{ .Values.deployment.owmHost }}
+          - name: PORT
+            value: "8080"
+      restartPolicy: Always

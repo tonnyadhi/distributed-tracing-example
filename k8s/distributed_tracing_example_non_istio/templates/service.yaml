@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-service
+  namespace: distributed-tracing-example-non-istio
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: {{ .Values.deployment.httpPortWeatherService }}
+    targetPort: {{ .Values.deployment.httpPortWeatherService }}
+  selector:
+    app: distributed-tracing-example
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: owm-service
+  namespace: distributed-tracing-example-non-istio
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: {{ .Values.deployment.httpPortOWMService }}
+    targetPort: {{ .Values.deployment.httpOWMService }}
+  selector:
+    app: distributed-tracing-example
+---

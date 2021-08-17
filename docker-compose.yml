@@ -1,0 +1,28 @@
+version: '3'
+services:
+  weather-service:
+    image: ragnalinux/distributed_tracing_example:weather_service_latest
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - OWM_ADDR=owm-service:8082   
+      - TRACER_ENDPOINT=http://jaeger:14268/api/traces
+  owm-service:
+    image: ragnalinux/distributed_tracing_example:owm_service_latest
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - OWM_APP_ID=5c118526d22ec862ba9d146bad2f3c45
+      #- TRACER_ENDPOINT=http://jaeger:14268/api/traces 
+      - TRACER_ENDPOINT=localhost:4317
+  jaeger:
+    image: jaegertracing/all-in-one
+    container_name: jaeger
+    ports:
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
