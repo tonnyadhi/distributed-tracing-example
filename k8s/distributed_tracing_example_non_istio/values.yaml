@@ -26,7 +26,6 @@ deployment:
   httpPortWeatherService: 8080
   httpPortOWMService: 8082
   healthPath: "/ping"
-  #tracerEndpoint: "http://jaeger-collector.istio-system.svc.cluster.local:14268/api/traces"
   tracerEndpoint: "opentelemetry-collector-sentry-collector.opentelemetry-collector.svc.cluster.local:4317"
   owmHost: "owm-service.distributed-tracing-example-non-istio.svc.cluster.local:8082"
-  owmAppID: "5c118526d22ec862ba9d146bad2f3c45"
+  owmAppID: "abc123"
